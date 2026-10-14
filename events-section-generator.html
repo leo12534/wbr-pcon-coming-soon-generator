@@ -1,0 +1,435 @@
+<style>
+  .pcon-gen-wrap { background: #f2f2f2; }
+  .pcon-gen-wrap .app-header { background-color: var(--event-header-color, #070749); color: #fff; padding: 1.25rem 1.5rem; border-radius: 0 0 var(--event-br-global, 10px) var(--event-br-global, 10px); margin-bottom: 1.5rem; }
+  .pcon-gen-wrap .app-header h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: #fff !important; }
+  .pcon-gen-wrap .app-header p { font-size: .85rem; opacity: .7; margin: .25rem 0 0; color: #fff; }
+  .pcon-gen-wrap .section-card { background: #fff; border-radius: var(--event-br-global, 10px); border: 1px solid #e2e8f0; margin-bottom: 1.5rem; overflow: hidden; }
+  .pcon-gen-wrap .section-card .section-header { background: var(--event-header-color, #070749); border-bottom: none; padding: .75rem 1.25rem; display: flex; align-items: center; gap: .6rem; }
+  .pcon-gen-wrap .section-card .section-header h2 { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #fff !important; margin: 0; }
+  .pcon-gen-wrap .event-block { border: 1px solid #e2e8f0; border-radius: var(--event-br-global, 8px); padding: 1rem; margin-bottom: 1rem; background: #f8fafc; }
+  .pcon-gen-wrap .event-block .event-num { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--event-color-primary, #0505B0); margin-bottom: .75rem; }
+  .pcon-gen-wrap label { font-size: .78rem; font-weight: 600; color: #475569; margin-bottom: .25rem; }
+  .pcon-gen-wrap .form-control { font-size: .85rem; border-radius: 6px; border-color: #cbd5e1; }
+  .pcon-gen-wrap .form-control:focus { border-color: var(--event-color-secondary, #0021FC); box-shadow: 0 0 0 2px rgba(0,33,252,.12); }
+  .pcon-gen-wrap .color-row { display: flex; gap: .5rem; align-items: center; }
+  .pcon-gen-wrap .color-row input[type="color"] { width: 36px; height: 34px; padding: 2px; border-radius: 6px; border: 1px solid #cbd5e1; cursor: pointer; flex-shrink: 0; }
+  .pcon-gen-wrap .color-row input[type="text"] { font-size: .8rem; }
+  #output-area { background: var(--event-header-color, #070749); color: #e2e8f0; border-radius: var(--event-br-global, 8px); padding: 1rem; font-size: .75rem; font-family: 'Courier New', monospace; white-space: pre; overflow-x: auto; max-height: 500px; overflow-y: auto; line-height: 1.5; }
+  .pcon-gen-wrap .output-section { background: #fff; border-radius: var(--event-br-global, 10px); border: 1px solid #e2e8f0; overflow: hidden; }
+  .pcon-gen-wrap .output-section .section-header { background: var(--event-header-color, #070749); border-bottom: none; padding: .75rem 1.25rem; display: flex; align-items: center; justify-content: space-between; }
+  .pcon-gen-wrap .output-section .section-header span { color: #fff !important; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+  .pcon-gen-wrap .tab-btn { font-size: .78rem; padding: .3rem .75rem; border-radius: var(--event-br-global, 6px); border: 1px solid rgba(255,255,255,.4); background: transparent; color: #fff; cursor: pointer; font-weight: 600; }
+  .pcon-gen-wrap .tab-btn.active { background: var(--event-color-secondary, #0021FC); color: #fff; border-color: var(--event-color-secondary, #0021FC); }
+  .pcon-gen-wrap .note { font-size: .75rem; color: #475569; background: #f1f5f9; border-left: 3px solid var(--event-color-secondary, #0021FC); border-radius: 0 6px 6px 0; padding: .5rem .75rem; margin-bottom: 1rem; }
+  .pcon-gen-wrap .note strong { color: var(--event-header-color, #070749); }
+  .copied-msg { font-size: .75rem; color: var(--event-color-tertiary, #08C9F7); font-weight: 600; display: none; }
+</style>
+
+<div class="pcon-gen-wrap">
+
+<div class="app-header">
+  <h1 class="font-primary">PCon Events Section Generator</h1>
+  <p class="font-secondary">Configure Coming Soon &amp; Check Out More Events — then copy the HTML blocks</p>
+</div>
+
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="d-flex flex-wrap" style="gap:.4rem;">
+            <button class="tab-btn active" id="main-tab-cs2" onclick="switchMainTab('cs2')">CS — 2 Events</button>
+            <button class="tab-btn" id="main-tab-cs4" onclick="switchMainTab('cs4')">CS — 4 Events</button>
+            <button class="tab-btn" id="main-tab-me" onclick="switchMainTab('me')">More Events</button>
+          </div>
+        </div>
+        <div class="p-3">
+          <div id="panel-cs2">
+            <div class="note"><strong>Layout:</strong> Card 1 right of heading. Card 2 left + image right in row 2.</div>
+            <div class="form-group mb-3">
+              <label>Row 2 Image URL</label>
+              <input type="url" class="form-control" id="cs2-image-url" placeholder="https://eco-cdn.iqpc.com/eco/images/..." value="https://eco-cdn.iqpc.com/eco/images/uploaded_images/4tJcdfENF5dAtIZbahYaf7G2EtIMx9A3vjP8AaTM.jpg">
+            </div>
+            <div id="coming-soon-events"></div>
+          </div>
+          <div id="panel-cs4" style="display:none;">
+            <div class="note"><strong>Layout:</strong> Card 1 right of heading. Cards 2 + 3 side by side. Card 4 left, image right.</div>
+            <div class="form-group mb-3">
+              <label>Row 3 Image URL</label>
+              <input type="url" class="form-control" id="cs4-image-url" placeholder="https://eco-cdn.iqpc.com/eco/images/..." value="https://eco-cdn.iqpc.com/eco/images/uploaded_images/4tJcdfENF5dAtIZbahYaf7G2EtIMx9A3vjP8AaTM.jpg">
+            </div>
+            <div id="coming-soon-4-events"></div>
+          </div>
+          <div id="panel-me" style="display:none;">
+            <div class="note"><strong>Layout:</strong> 2×2 grid. No image.</div>
+            <div class="mb-3 d-flex align-items-center">
+              <span class="mr-2" style="font-size:.8rem;color:#475569;font-weight:600;">Active cards:</span>
+              <select class="form-control d-inline-block w-auto" id="more-count" style="font-size:.82rem;">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4" selected>4</option>
+              </select>
+            </div>
+            <div id="more-events"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-event btn-block mb-3 font-secondary" id="btn-generate">
+        ⚡ Generate HTML
+      </button>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="output-section sticky-top" style="top:1rem;">
+        <div class="section-header">
+          <span style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.08em;">Generated HTML</span>
+          <div class="d-flex align-items-center">
+            <span class="copied-msg" id="copied-msg">Copied!</span>
+            <button class="btn btn-outline-inverse btn-copy ml-2 font-tertiary" onclick="copyOutput()">Copy</button>
+          </div>
+        </div>
+        <div class="p-3">
+          <div id="output-area">Click "Generate HTML" to see output here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const LOGO_BASE = '/UploadedFiles/EventPage/brands/procurecon/reff/logos/knockout/';
+const LOGOS = [
+  { label: 'ProcureCon East', file: 'pcon-east-knockout.svg' },
+  { label: 'ProcureCon West', file: 'pcon-west-knockout.svg' },
+  { label: 'ProcureCon EU', file: 'pcon-eu-knockout.svg' },
+  { label: 'ProcureCon EU Connect', file: 'pcon-eu-connect-knockout.svg' },
+  { label: 'ProcureCon Connect', file: 'pcon-connect-knockout.svg' },
+  { label: 'ProcureCon MRO', file: 'pcon-mro-knockout.svg' },
+  { label: 'ProcureCon IT Sourcing', file: 'pcon-it-sourcing-knockout.svg' },
+  { label: 'ProcureCon Marketing USA', file: 'pcon-marketing-knockout.svg' },
+  { label: 'ProcureCon Mkt EU', file: 'pcon-mkt-eu-knockout.svg' },
+  { label: 'ProcureCon Mkt EU Connect', file: 'pcon-mkt-eu-connect-knockout.svg' },
+  { label: 'ProcureCon Total Talent', file: 'pcon-tt-knockout.svg' },
+  { label: 'ProcureCon Indirect', file: 'pcon-indirect-knockout.svg' },
+  { label: 'ProcureCon Direct', file: 'pcon-direct-knockout.svg' },
+  { label: 'ProcureCon (custom path)', file: '' },
+];
+
+const PRESETS = [
+  { label: 'EU (Dark Blue/Gold)', region: 'EU', bg: '#003575', c1: '#00479b', c2: '#16c3f9', c3: '#f9c043', logo: 'pcon-eu-knockout.svg', url: 'https://procureconeu.wbresearch.com/', date: 'September 22 — 24, 2026', venue: 'Austria Center Vienna' },
+  { label: 'Marketing EU (Navy)', region: 'EU', bg: '#03437c', c1: '#0475ae', c2: '#2eb9ff', c3: '#28e851', logo: 'pcon-mkt-eu-knockout.svg', url: 'https://procureconmarketing.wbresearch.com/', date: 'June 3 — 4, 2026', venue: 'Club Chelsea, London' },
+  { label: 'Mkt EU Connect (Blue)', region: 'EU', bg: '#03437c', c1: '#0278c1', c2: '#4bf9f9', c3: '#31b1ff', logo: 'pcon-mkt-eu-connect-knockout.svg', url: 'https://procureconmarketingconnect.wbresearch.com/', date: 'December 1 — 2, 2026', venue: 'Ashridge House, Hertfordshire' },
+  { label: 'Total Talent (Dark/Magenta)', region: 'EU', bg: '#070749', c1: '#560046', c2: '#8e0281', c3: '#fc8770', logo: 'pcon-tt-knockout.svg', url: 'https://procurecontotaltalent.wbresearch.com/', date: 'March 17 — 18, 2027', venue: 'Novotel Amsterdam City' },
+  { label: 'EU Connect (Purple)', region: 'EU', bg: '#252358', c1: '#2e2c6e', c2: '#f26583', c3: '#343278', logo: 'pcon-eu-connect-knockout.svg', url: 'https://procureconconnect.wbresearch.com/', date: 'April 21 — 22, 2026', venue: 'Novotel Paris Centre Tour Eiffel' },
+  { label: 'CS Connect (Rust)', region: 'USA', bg: '#7D1F0A', c1: '#CC4705', c2: '#F2B578', c3: '#A1335E', logo: '', logoPath: '/UploadedFiles/EventPage/1005396/images/event-logo-knockout-4.svg', url: 'https://contingentstaffingconnect.wbresearch.com/', date: 'October 19 — 20, 2026', venue: 'Hyatt Regency Atlanta, GA' },
+  { label: 'Connect USA (Indigo)', region: 'USA', bg: '#212187', c1: '#404AA4', c2: '#AD78C8', c3: '#752C6E', logo: 'pcon-connect-knockout.svg', url: 'https://procureconconnectus.wbresearch.com/', date: 'June 15 — 16, 2026', venue: 'Hyatt Regency Austin, TX' },
+  { label: 'Marketing USA (Purple)', region: 'USA', bg: '#4705C7', c1: '#9105DE', c2: '#FF73DE', c3: '#E508BD', logo: 'pcon-marketing-knockout.svg', url: 'https://procurecondm.wbresearch.com/', date: 'November 9 — 11, 2026', venue: 'Sheraton Grand at Wildhorse Pass, Phoenix, AZ' },
+  { label: 'IT Sourcing (Green)', region: 'USA', bg: '#070749', c1: '#007A59', c2: '#03BD7D', c3: '#03E8C7', logo: 'pcon-it-sourcing-knockout.svg', url: 'https://procureconit.wbresearch.com/', date: 'June 15 — 16, 2026', venue: 'Hyatt Regency Austin, TX' },
+  { label: 'Contingent Staffing (Red)', region: 'USA', bg: '#7b2116', c1: '#cb4927', c2: '#f1b478', c3: '#f1b478', logo: '', logoPath: '/UploadedFiles/EventPage/1005403/images/ProcureCon-Contingent-Staffing-logo-white.svg', url: 'https://contingentstaffing.wbresearch.com/', date: 'April 14 — 16, 2026', venue: 'JW Marriott Las Vegas Resort & Spa, NV' },
+  { label: 'East (Navy/Blue)', region: 'USA', bg: '#070749', c1: '#0505B0', c2: '#0021FC', c3: '#08C9F7', logo: 'pcon-east-knockout.svg', url: 'https://procureconeast.wbresearch.com/', date: 'September 28 — 30, 2026', venue: 'The Westin Copley Place, Boston MA' },
+  { label: 'West (Navy/Coral)', region: 'USA', bg: '#070749', c1: '#0505B0', c2: '#0021FC', c3: '#fc8770', logo: '', logoPath: '/UploadedFiles/EventPage/1005310/logos/ProcureConWest_logo_white_2026.svg', url: 'https://procureconwest.wbresearch.com/', date: 'March 8 — 10, 2027', venue: 'JW Marriott Las Vegas Resort and Spa' },
+  { label: 'MRO (Teal)', region: 'USA', bg: '#006669', c1: '#0A8FBA', c2: '#03C4C4', c3: '#80D9FF', logo: 'pcon-mro-knockout.svg', url: 'https://procureconmro.wbresearch.com/', date: 'October 5 — 6, 2026', venue: 'The Whitley Hotel Atlanta, GA' },
+  { label: 'Travel (Red)', region: 'USA', bg: '#FA1A40', c1: '#FA1A40', c2: '#FC3B8A', c3: '#FAE003', logo: '', logoPath: '/UploadedFiles/EventPage/1005410/images/ProcureCon-Travel-logo-white.svg', url: 'https://procurecontravel.wbresearch.com/', date: 'May 11 - 12, 2027', venue: 'Hilton Denver City Center' },
+];
+
+function buildEventForm(id, num, label) {
+  const logoOpts = LOGOS.map(l => `<option value="${l.file}">${l.label}</option>`).join('');
+  const makeOpts = (region) => PRESETS.map((p, i) => p.region === region ? `<option value="${i}">${p.label}</option>` : '').join('');
+  const presetOpts = `<option value="">— Apply Preset —</option><optgroup label="EU / UK">${makeOpts('EU')}</optgroup><optgroup label="USA">${makeOpts('USA')}</optgroup>`;
+  return `
+  <div class="event-block" id="block-${id}-${num}">
+    <div class="event-num">${label} ${num}</div>
+    <div class="form-group mb-2">
+      <label>Quick Preset</label>
+      <select class="form-control logo-select" id="${id}-${num}-preset" onchange="applyPreset('${id}',${num},this.value)">
+        ${presetOpts}
+      </select>
+    </div>
+    <div class="form-group mb-2">
+      <label>Event URL</label>
+      <input type="url" class="form-control" id="${id}-${num}-url" placeholder="https://procurecon___.wbresearch.com/">
+    </div>
+    <div class="form-group mb-2">
+      <label>Logo</label>
+      <select class="form-control logo-select" id="${id}-${num}-logo-select" onchange="syncLogoPath('${id}',${num},this.value)">
+        ${logoOpts}
+      </select>
+      <input type="text" class="form-control mt-1" id="${id}-${num}-logo" placeholder="/UploadedFiles/EventPage/brands/procurecon/reff/logos/knockout/pcon-__.svg" value="${LOGO_BASE}pcon-mro-knockout.svg">
+    </div>
+    <div class="form-row mb-2">
+      <div class="col-8">
+        <label>Date</label>
+        <input type="text" class="form-control" id="${id}-${num}-date" placeholder="September 29 — 30, 2025">
+      </div>
+      <div class="col-4">
+        <label>Card BG Color</label>
+        <div class="color-row">
+          <input type="color" id="${id}-${num}-bg-picker" value="#006669" oninput="syncColor('${id}',${num},'bg',this.value)">
+          <input type="text" class="form-control" id="${id}-${num}-bg" value="#006669" oninput="syncPicker('${id}',${num},'bg',this.value)">
+        </div>
+      </div>
+    </div>
+    <div class="form-group mb-2">
+      <label>Venue</label>
+      <input type="text" class="form-control" id="${id}-${num}-venue" placeholder="Sheraton Fort Worth Downtown Hotel">
+    </div>
+    <div class="form-group mb-1">
+      <label>SVG Accent Colors</label>
+      <div class="d-flex gap-2 flex-wrap">
+        <div class="mr-3">
+          <div style="font-size:.7rem;color:#94a3b8;margin-bottom:2px;">Circle 1</div>
+          <div class="color-row">
+            <input type="color" id="${id}-${num}-c1-picker" value="#03C4C4" oninput="syncColor('${id}',${num},'c1',this.value)">
+            <input type="text" class="form-control" id="${id}-${num}-c1" value="#03C4C4" oninput="syncPicker('${id}',${num},'c1',this.value)" style="width:90px;">
+          </div>
+        </div>
+        <div class="mr-3">
+          <div style="font-size:.7rem;color:#94a3b8;margin-bottom:2px;">Circle 2</div>
+          <div class="color-row">
+            <input type="color" id="${id}-${num}-c2-picker" value="#0A8FBA" oninput="syncColor('${id}',${num},'c2',this.value)">
+            <input type="text" class="form-control" id="${id}-${num}-c2" value="#0A8FBA" oninput="syncPicker('${id}',${num},'c2',this.value)" style="width:90px;">
+          </div>
+        </div>
+        <div>
+          <div style="font-size:.7rem;color:#94a3b8;margin-bottom:2px;">Accent Shape</div>
+          <div class="color-row">
+            <input type="color" id="${id}-${num}-c3-picker" value="#80D9FF" oninput="syncColor('${id}',${num},'c3',this.value)">
+            <input type="text" class="form-control" id="${id}-${num}-c3" value="#80D9FF" oninput="syncPicker('${id}',${num},'c3',this.value)" style="width:90px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function syncColor(section, num, field, val) {
+  document.getElementById(`${section}-${num}-${field}`).value = val;
+}
+function syncPicker(section, num, field, val) {
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    document.getElementById(`${section}-${num}-${field}-picker`).value = val;
+  }
+}
+function syncLogoPath(section, num, val) {
+  if (val) {
+    document.getElementById(`${section}-${num}-logo`).value = LOGO_BASE + val;
+  }
+}
+function applyPreset(section, num, idx) {
+  if (idx === '') return;
+  const p = PRESETS[parseInt(idx)];
+  document.getElementById(`${section}-${num}-url`).value = p.url;
+  const isCustom = p.logoPath || p.logo === '';
+  document.getElementById(`${section}-${num}-logo`).value = isCustom ? (p.logoPath || '') : LOGO_BASE + p.logo;
+  document.getElementById(`${section}-${num}-logo-select`).value = isCustom ? '' : p.logo;
+  if (p.date !== undefined) document.getElementById(`${section}-${num}-date`).value = p.date;
+  if (p.venue !== undefined) document.getElementById(`${section}-${num}-venue`).value = p.venue;
+  ['bg','c1','c2','c3'].forEach(f => {
+    document.getElementById(`${section}-${num}-${f}`).value = p[f];
+    document.getElementById(`${section}-${num}-${f}-picker`).value = p[f];
+  });
+}
+
+(function() {
+  let html = '';
+  for (let i = 1; i <= 2; i++) html += buildEventForm('cs', i, 'Event');
+  document.getElementById('coming-soon-events').innerHTML = html;
+})();
+(function() {
+  let html = '';
+  for (let i = 1; i <= 4; i++) html += buildEventForm('cs4', i, 'Event');
+  document.getElementById('coming-soon-4-events').innerHTML = html;
+})();
+(function() {
+  let html = '';
+  for (let i = 1; i <= 4; i++) html += buildEventForm('me', i, 'Event');
+  document.getElementById('more-events').innerHTML = html;
+})();
+
+document.getElementById('more-count').addEventListener('change', function() {
+  const count = parseInt(this.value);
+  for (let i = 1; i <= 4; i++) {
+    const block = document.getElementById(`block-me-${i}`);
+    if (block) block.style.display = i <= count ? '' : 'none';
+  }
+});
+
+let currentMode = 'cs2';
+function switchMainTab(mode) {
+  currentMode = mode;
+  ['cs2','cs4','me'].forEach(m => {
+    document.getElementById(`main-tab-${m}`).classList.toggle('active', m === mode);
+    document.getElementById(`panel-${m}`).style.display = m === mode ? '' : 'none';
+  });
+}
+
+function accentSVG(c1, c2, c3) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 293 215">
+                                    <path fill="${c1}" fill-rule="evenodd" d="M52.2 145.3c49.2 28.4 112.1 11.6 140.5-37.7C221.1 58.4 204.3-4.5 155-32.9 105.9-61.3 43-44.5 14.6 4.7-13.9 54 3 116.9 52.2 145.3Zm12-20.7c37.8 21.8 86.1 8.9 107.9-28.9 21.8-37.8 8.9-86.1-28.9-107.9C105.4-34 57.1-21.1 35.3 16.7c-21.8 37.8-8.9 86.1 28.9 107.9Z"></path>
+                                    <path fill="${c2}" fill-rule="evenodd" d="M201.2 250.5c49.2 28.4 112.1 11.6 140.5-37.7 28.4-49.2 11.6-112.1-37.7-140.5-49.2-28.4-112.1-11.6-140.5 37.7-28.4 49.2-11.6 112.1 37.7 140.5Zm11.6-19.7c37.8 21.8 86.1 8.9 107.9-28.9 21.8-37.8 8.9-86.1-28.9-107.9-37.8-21.8-86.1-8.9-107.9 28.9-21.8 37.8-8.9 86.1 28.9 107.9Z"></path>
+                                    <path fill="${c3}" fill-rule="evenodd" d="M150.6 147.8c15.3-7.2 29.7-18.8 40-34.7 8.6-13.3 13.5-28.9 15.1-43.2-15.4 7.2-29.6 19.8-39.9 35.7-8.7 13.3-13.6 27.9-15.2 42.3Z"></path>
+                                </svg>`;
+}
+
+const PIN_SVG = `<svg width="15" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 15">
+                                                <path d="M10.6 5.5A6 6 0 0 1 9.8 8 24.9 24.9 0 0 1 6 13.5l-.5.6a45.8 45.8 0 0 1-4.3-6 7.7 7.7 0 0 1-.8-2.7 5 5 0 0 1 10.2 0Z" stroke="#fff" stroke-width=".9"></path>
+                                                <circle cx="5.5" cy="5.5" r="2.1" stroke="#fff" stroke-width=".9"></circle>
+                                            </svg>`;
+
+function getVal(id) { return document.getElementById(id)?.value?.trim() || ''; }
+
+function buildCard(section, num) {
+  const url    = getVal(`${section}-${num}-url`);
+  const logo   = getVal(`${section}-${num}-logo`);
+  const date   = getVal(`${section}-${num}-date`);
+  const venue  = getVal(`${section}-${num}-venue`);
+  const bg     = getVal(`${section}-${num}-bg`);
+  const c1     = getVal(`${section}-${num}-c1`);
+  const c2     = getVal(`${section}-${num}-c2`);
+  const c3     = getVal(`${section}-${num}-c3`);
+  const dateFmt = date.replace(/\s*[—–-]+\s*/g, ' <span class="font-weight-light opacity-75">—</span> ');
+
+  return `                    <a href="${url}" target="_blank" data-feathr-click-track="true" data-feathr-link-aids="5850143e7c1fea34ebb31cca">
+                        <div class="row no-gutters rounded-xl h-100" style="background-color:${bg};">
+                            <div class="coming-soon-banner d-flex justify-content-between w-100 position-relative h-100">
+                                <div class="d-flex d-inline flex-column justify-content-between" style="flex: 1 0 60%;">
+                                    <img class="w-75 m-3" src="${logo}" alt="">
+                                    <div class="m-3">
+                                        <h3 class="text-white font-secondary font-weight-bold mb-0 mt-lg-5">${dateFmt}</h3>
+                                        <p class="text-white mb-0 font-weight-light opacity-75">${PIN_SVG} <span class="opacity-75">${venue}</span></p>
+                                    </div>
+                                </div>
+                                ${accentSVG(c1, c2, c3)}
+                            </div>
+                        </div>
+                    </a>`;
+}
+
+function generateComingSoon() {
+  return `<div class="container-fluid my-5 hidden-rebrand">
+    <style>
+    @media (min-width:768px) {
+        .coming-soon-banner {
+            height: 200px !important;
+        }
+    }
+
+    @media (min-width:992px) {
+        .coming-soon-banner {
+            height: unset !important;
+        }
+    }
+    </style>
+    <div class="row">
+        <div class="col-md-11 mx-auto my-md-5">
+            <div class="row my-1">
+                <div class="col-md-6 pl-md-0">
+                    <h2 class=" h1 border-top border-event py-2 mb-0 font-weight-light">Coming Soon</h2>
+                </div>
+                <div class="col-md-6 pl-md-1 mh-100">
+${buildCard('cs', 1)}
+                </div>
+            </div>
+            <div class="row my-1">
+                <div class="col-md-6 my-1 pl-md-0 pr-md-0 mh-100">
+${buildCard('cs', 2)}
+                </div>
+                <div class="col-md-3 my-1 pl-md-1"><img alt="img" class="img-fluid mx-auto card-img-top rounded-xl h-100 object-fit-cover" src="${getVal('cs2-image-url') || 'https://eco-cdn.iqpc.com/eco/images/uploaded_images/4tJcdfENF5dAtIZbahYaf7G2EtIMx9A3vjP8AaTM.jpg'}" style=""></div>
+            </div>
+        </div>
+    </div>
+</div>`;
+}
+
+function generateComingSoon4() {
+  const imgUrl = getVal('cs4-image-url') || 'https://eco-cdn.iqpc.com/eco/images/uploaded_images/4tJcdfENF5dAtIZbahYaf7G2EtIMx9A3vjP8AaTM.jpg';
+  return `<div class="container-fluid my-5 hidden-rebrand">
+    <div class="row">
+        <div class="col-md-11 mx-auto my-md-5">
+            <div class="row my-1 ">
+                <div class="col-md-6 pl-md-0">
+                    <h2 class=" h1 border-top border-event py-2 mb-0 font-weight-light">Coming Soon</h2>
+                </div>
+                <div class="col-md-6 pl-md-1 mh-100">
+${buildCard('cs4', 1)}
+                </div>
+            </div>
+            <div class="row my-1 ">
+                <div class="col-md-6 my-1 pl-md-0 pr-md-0 mh-100">
+${buildCard('cs4', 2)}
+                </div>
+                <div class="col-md-6 pl-md-1 mh-100">
+${buildCard('cs4', 3)}
+                </div>
+            </div>
+            <div class="row my-1 ">
+                <div class="col-md-6 my-1 pl-md-0 pr-md-0 mh-100">
+${buildCard('cs4', 4)}
+                </div>
+                <div class="col-md-3 my-1 pl-md-1"><img alt="img" class="img-fluid mx-auto card-img-top rounded-xl h-100 object-fit-cover" src="${imgUrl}" style=""></div>
+            </div>
+        </div>
+    </div>
+</div>`;
+}
+
+function generateMoreEvents() {
+  const count = parseInt(document.getElementById('more-count').value);
+  let rows = '';
+  for (let i = 1; i <= count; i += 2) {
+    const card1 = buildCard('me', i);
+    const card2 = i + 1 <= count ? `\n                <div class="col-md-6 my-1 pl-md-1 mh-100">\n${buildCard('me', i+1)}\n                </div>` : '';
+    rows += `
+            <div class="row">
+                <div class="col-md-6 my-1 pl-md-1 mh-100">
+${card1}
+                </div>${card2}
+            </div>`;
+  }
+  return `<div class="container-fluid my-5 hidden-rebrand">
+    <style>
+    @media (min-width:768px) {
+        .coming-soon-banner {
+            height: 200px !important;
+        }
+    }
+
+    @media (min-width:992px) {
+        .coming-soon-banner {
+            height: unset !important;
+        }
+    }
+    </style>
+    <div class="row">
+        <div class="col-md-11 mx-auto my-md-5">
+            <div class="row my-1">
+                <div class="col-md-6 pl-md-0">
+                    <h2 class="h1 border-top border-event py-2 mb-0 font-weight-light">Check Out More Events</h2>
+                </div>
+            </div>${rows}
+        </div>
+    </div>
+</div>`;
+}
+
+document.getElementById('btn-generate').addEventListener('click', function() {
+  let html = '';
+  if (currentMode === 'cs2') html = generateComingSoon();
+  else if (currentMode === 'cs4') html = generateComingSoon4();
+  else html = generateMoreEvents();
+  document.getElementById('output-area').textContent = html;
+});
+
+function copyOutput() {
+  const out = document.getElementById('output-area').textContent;
+  if (!out || out === 'Click "Generate HTML" to see output here.') return;
+  navigator.clipboard.writeText(out).then(() => {
+    const msg = document.getElementById('copied-msg');
+    msg.style.display = 'inline';
+    setTimeout(() => msg.style.display = 'none', 2000);
+  });
+}
+</script>
